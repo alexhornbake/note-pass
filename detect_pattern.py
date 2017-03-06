@@ -7,8 +7,10 @@ import numpy as np
 #only process contours with bounding rects larger than
 firstpass_size_threshold=5
 secondpass_size_theshold=5
-output_width=200
+output_width=400
 output_padding=50
+numRows = 11
+numCols = 11
 
 # Load the classifier
 clf = joblib.load("symbols_v001_cls.pkl")
@@ -82,7 +84,7 @@ def detectImage(im):
 
 	# check if we have the 4 corners
 	if len(foundFours) != 4 :
-		return im_th, False
+		return im_th, 0, 0, False
 
 	boundingPolygon = getBoundingCornersOfRects(foundFours)
 
@@ -104,12 +106,12 @@ def detectImage(im):
 	foundFours, im_th = getRectsForLabelsInImage(warped, 4, secondpass_size_theshold)
 	# check if we have the 4 corners
 	if len(foundFours) != 4 :
-		return warped, True
+		return warped, 0, 0, False
 
+	boundingPolygon = getBoundingCornersOfRects(foundFours)
 
 	avgRectSize = getAvgRectSize(foundFours)
 
-	boundingPolygon = getBoundingCornersOfRects(foundFours)
 	targetPolygon = np.array([
 		[0,0],
 		[output_width,0],
@@ -118,13 +120,6 @@ def detectImage(im):
 	], np.float32)
 
 	warpMat = cv2.getPerspectiveTransform(boundingPolygon, targetPolygon)
-	warped = cv2.warpPerspective(im_th, warpMat, (output_width,output_height))
+	warped = cv2.warpPerspective(warped, warpMat, (output_width,output_height))
 
-	#cv2.polylines(im, [np.int32(boundingPolygon).reshape((-1,1,2))], True, (0,255,0))
-	#cv2.rectangle(im, (upperLeft[0], upperLeft[1]), (lowerRight[0]+lowerRight[2], lowerRight[1]+lowerRight[3]), (0,255,0),3)
-
-	#for rect in foundFours:
-		# Draw the rectangles
-		#cv2.rectangle(warped, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (0, 255, 0), 3)
-
-	return warped, True
+	return warped, numCols, numRows, True
