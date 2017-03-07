@@ -1,9 +1,29 @@
+import sys
 import cv2
 import numpy as np
 import detect_pattern
 import collections
+import hashlib
+import base64
 
 cap = cv2.VideoCapture(0)
+password = sys.argv[1]
+prevDecoded = []
+sequentialHitsRequired = 5
+
+def appendAndCheckPrev(prevDecoded, curr):
+    prevDecoded.append(curr)
+    if len(prevDecoded) > sequentialHitsRequired :
+        prevDecoded = prevDecoded[-sequentialHitsRequired:]
+
+    if len(prevDecoded) < sequentialHitsRequired :
+        return prevDecoded, False
+
+    for s in prevDecoded:
+        if curr != s:
+            return prevDecoded, False
+
+    return prevDecoded, True
 
 while True:
     cameraImg = cap.read()[1]
@@ -44,6 +64,7 @@ while True:
     
     #average color in bin for detection
     thresh = 230
+    decodedBits = []
 
     # draw col bins
     bwp = .75 # bin width as percent
@@ -61,6 +82,9 @@ while True:
             avg = np.average(roi)
             if avg < thresh :
                 cv2.rectangle(im_th, pt1, pt2, (0, 255, 0), -1)
+                decodedBits.append(True)
+            else:
+                decodedBits.append(False)
 
         oy = oy + np.float32(rect_height)
 
@@ -80,8 +104,21 @@ while True:
             avg = np.average(roi)
             if avg < thresh :
                 cv2.rectangle(im_th, pt1, pt2, (0, 255, 0), -11)
+                decodedBits.append(True)
+            else:
+                decodedBits.append(False)
 
         oy = oy + np.float32(rect_height)
+
+    decodedBytes = np.packbits(np.uint8(decodedBits))
+    decodedString = ""
+    for indx, i in enumerate(decodedBytes):
+        decodedString += chr(i)
+
+    prevDecoded, isStable = appendAndCheckPrev(prevDecoded, decodedString)
+    if isStable:
+        print(base64.b64encode(hashlib.sha256(decodedString+password).hexdigest()))
+        break
 
     cv2.imshow('detected', im_th)
     
