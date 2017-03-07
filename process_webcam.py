@@ -43,15 +43,15 @@ while True:
     im_th = cv2.cvtColor(im_th,cv2.COLOR_GRAY2RGB)
     
     #average color in bin for detection
-    thresh = 210
+    thresh = 230
 
     # draw col bins
-    bwp = .5 # bin width as percent
-    bhp = .5 # bin height as percent
+    bwp = .75 # bin width as percent
+    bhp = .25 # bin height as percent
     bw = np.float32(rect_width)*np.float32(bwp) # bin width
     bh = np.float32(rect_height)*np.float32(bhp) # bin height
     ox = np.float32(rect_width) * np.float32(1.0-0.5*bwp)
-    oy = np.float32(0.5*bhp)*np.float32(rect_height)
+    oy = np.float32(0.5 - 0.5*bhp)*np.float32(rect_height)
 
     for i in range(0,numRows):
         for j in range(0, numCols-1):
@@ -65,11 +65,11 @@ while True:
         oy = oy + np.float32(rect_height)
 
     # # draw row bins
-    bwp = .5 # bin width as percent
-    bhp = .5 # bin height as percent
+    bwp = .25 # bin width as percent
+    bhp = .75 # bin height as percent
     bw = np.float32(rect_width)*np.float32(bwp) # bin width
     bh = np.float32(rect_height)*np.float32(bhp) # bin height
-    ox = np.float32(0.5*bwp)*np.float32(rect_width)
+    ox = np.float32(0.5 - 0.5*bwp)*np.float32(rect_width)
     oy = np.float32(1.0-0.5*bhp)*np.float32(rect_height)
 
     for i in range(0,numRows-1):
