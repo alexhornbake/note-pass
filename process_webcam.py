@@ -2,12 +2,13 @@ import sys
 import cv2
 import numpy as np
 import detect_pattern
-import collections
+import generate_password
+
 import hashlib
 import base64
 
 cap = cv2.VideoCapture(0)
-password = sys.argv[1]
+masterPass = sys.argv[1]
 prevDecoded = []
 sequentialHitsRequired = 5
 
@@ -38,7 +39,6 @@ while True:
         continue
 
     decodedImage, decodedBits = detect_pattern.decodeBitsFromDetectedImage(detected, 11, 11)
-
     decodedBytes = np.packbits(np.uint8(decodedBits))
     decodedString = ""
     for indx, i in enumerate(decodedBytes):
@@ -46,7 +46,7 @@ while True:
 
     prevDecoded, isStable = appendAndCheckPrev(prevDecoded, decodedString)
     if isStable:
-        print(base64.b64encode(hashlib.sha256(decodedString+password).hexdigest()))
+        print(generate_password.getPassword('./policies/example.json', masterPass, decodedBits))
         break
 
     cv2.imshow('detected', decodedImage)

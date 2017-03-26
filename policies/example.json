@@ -1,0 +1,39 @@
+{
+  "policy_name": "chase.com",
+  "policy_version": "1",
+  "policy_date": 1489295234,
+  "policy_checksum": {
+    "algo": "sha256",
+    "hash": "86e249f84b95bc2d568fdd908c4aadff05946ac379d051d8cb00c3876e786fe1"
+  },
+  "character_length": 32,
+  "character_types": {
+    "a-z": "abcdefghijklmnopqrstuvwxyz",
+    "A-Z": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "0-9": "0123456789",
+    "special": "#$%'^,()*+.:|=?@/][_`{}~\\!;-"
+  },
+  "required_characters": [
+    {
+      "count": 1,
+      "types": [
+        "a-z",
+        "A-Z"
+      ]
+    },
+    {
+      "count": 1,
+      "types": [
+        "0-9"
+      ]
+    },
+    {
+      "count": 1,
+      "types": [
+        "special"
+      ]
+    }
+  ],
+  "max_consecutive_characters": 2,
+  "max_sequential_characters": 2
+}
