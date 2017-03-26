@@ -27,7 +27,7 @@ def appendAndCheckPrev(prevDecoded, curr):
 
 while True:
     cameraImg = cap.read()[1]
-    detected, numCols, numRows, wasFound = detect_pattern.getPatternFromImage(cameraImg)
+    detected, wasFound = detect_pattern.getPatternFromImage(cameraImg, 11, 11)
 
     cv2.imshow('image', cameraImg)
     key = cv2.waitKey(1)
@@ -37,7 +37,7 @@ while True:
     if not wasFound:
         continue
 
-    decodedImage, decodedBits = detect_pattern.decodeBitsFromDetectedImage(detected)
+    decodedImage, decodedBits = detect_pattern.decodeBitsFromDetectedImage(detected, 11, 11)
 
     decodedBytes = np.packbits(np.uint8(decodedBits))
     decodedString = ""

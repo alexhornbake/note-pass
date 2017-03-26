@@ -4,19 +4,10 @@ from sklearn.externals import joblib
 import skimage.feature as feature
 import numpy as np
 
-#only process contours with bounding rects larger than
-firstpass_size_threshold=5
-secondpass_size_theshold=5
-output_width=400
-output_padding=50
-numRows = 11
-numCols = 11
-white = (255, 255, 255)
-
-# Load the classifier
-clf = joblib.load("./classifiers/symbols_v001_cls.pkl")
 
 def getRectsForLabelsInImage(im, label, thresh):
+
+    clf = joblib.load("./classifiers/symbols_v001_cls.pkl")
     # Convert to grayscale and apply filtering for better detection
     im_gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
     im_gray = cv2.GaussianBlur(im_gray, (5, 5), 0)
@@ -81,13 +72,19 @@ def getAvgRectSize(rects):
     t = np.transpose(np.array(rects))
     return [np.average(t[2]), np.average(t[3])]
 
-def getPatternFromImage(im):
+def getPatternFromImage(im, numCols, numRows):
+    firstpass_size_threshold=5
+    secondpass_size_theshold=5
+    output_width=400
+    output_padding=50
+    white = (255, 255, 255)
+    
     # find the 4 X's in the corner of the pattern
     foundFours, im_th = getRectsForLabelsInImage(im, 4, firstpass_size_threshold)
 
     # check if we have the 4 corners
     if len(foundFours) != 4 :
-        return im_th, 0, 0, False
+        return im_th, False
 
     # get the outside corners of the 4 X's
     boundingPolygon = getBoundingCornersOfRects(foundFours)
@@ -112,7 +109,7 @@ def getPatternFromImage(im):
     foundFours, im_th = getRectsForLabelsInImage(warped, 4, secondpass_size_theshold)
     # check if we have the 4 corners
     if len(foundFours) != 4 :
-        return warped, 0, 0, False
+        return warped, False
 
     boundingPolygon = getBoundingCornersOfRects(foundFours)
 
@@ -149,9 +146,9 @@ def getPatternFromImage(im):
     cv2.rectangle(im_th, (width-w, height-h), (width,height), white, -1)
     cv2.rectangle(im_th, (0, height-h), (w,height), white, -1)
 
-    return im_th, numCols, numRows, True
+    return im_th, True
 
-def decodeBitsFromDetectedImage(detected):
+def decodeBitsFromDetectedImage(detected, numCols, numRows):
     #convert to RGB so that we can draw color debug
     im_th = cv2.cvtColor(detected,cv2.COLOR_GRAY2RGB)
     
