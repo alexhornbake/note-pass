@@ -6,10 +6,12 @@ import numpy as np
 import cv2
 from glob import glob
 
+outputFile = "./classifiers/symbols_v001_cls.pkl"
+
 features = []
 labels = []
 
-print("transform images to hog features")
+print("transforming images to hog features...")
 for i in range(1, 7):
 	print("processing ./ml_images/{0}/*.png".format(i))
 	for file in glob('./ml_images/{0}/*.png'.format(i)):
@@ -25,7 +27,7 @@ hog_features = np.array(features, 'float64')
 hog_labels = np.array(labels, 'int')
 clf = LinearSVC()
 
-print("classifying the features")
+print("classifying the features...")
 clf.fit(hog_features, hog_labels)
-joblib.dump(clf, "symbols_v001_cls.pkl", compress=0)
-print("done")
+joblib.dump(clf, outputFile, compress=0)
+print("done!")
