@@ -1,7 +1,6 @@
 {
   "policy_name": "chase.com",
   "policy_version": "1",
-  "policy_date": 1489295234,
   "character_length": 32,
   "character_types": {
     "a-z": "abcdefghijklmnopqrstuvwxyz",
@@ -31,5 +30,5 @@
     }
   ],
   "max_consecutive_characters": 2,
-  "max_sequential_characters": 2
+  "max_repeating_characters": 2
 }
