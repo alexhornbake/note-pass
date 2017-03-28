@@ -34,8 +34,7 @@ class Policy:
         )
 
     def applyRules(self, password):
-
-        return password
+        return password[:self.__policy['character_length']]
 
     def isCorrectLength(self, password):
         return len(password) == self.__policy['character_length']
