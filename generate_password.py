@@ -1,42 +1,31 @@
 import hashlib
-import base64
-import json
 import numpy as np
-import collections
+from password_policy import Policy
 
 def getPassword(policyFilename, masterPass, bits):
-    # TODO: policy loading/validation needs to happen in it's own class
-    # load the policy
-    try:
-        data = open(policyFilename)
-    except Exception as e:
-        print("Failed to read file: ", policyFilename)
-        print(e)
-
-    try:
-        policy = json.load(data)
-    except Exception as e:
-        print("Failed to pasrse json in: ", policyFilename)
-        print(e)
-
-    # get base charset from policy
-    baseChars = ""
-    sortedCharacterTypes = collections.OrderedDict(sorted(policy['character_types'].items()))
-    for indx, c in enumerate(sortedCharacterTypes):
-        baseChars += sortedCharacterTypes[c]
-
+    policy = Policy(policyFilename)
+    
+    baseChars = policy.getBaseCharacters()
+    
     # pack bits in to bytes
     decodedBytes = np.packbits(np.uint8(bits))
     decodedString = ""
     for indx, i in enumerate(decodedBytes):
         decodedString += chr(i)
 
-
+    # generate 64 bytes derived from masterPass, and decodedBytes.
     passwordSeed = hashlib.pbkdf2_hmac('sha512', masterPass, decodedBytes, 100000)
+
+    # use those 64 bytes to select characters from our base character set.
     password = ""
     for indx, i in enumerate(passwordSeed):
+        # select a character from our base character set. This is likely smaller
+        # than 256 chars, so we modulo by length to wrap around.
         password += baseChars[ord(i)%len(baseChars)]
 
-    # TODO: apply the policy rules
+    password = policy.applyRules(password)
 
-    return password
+    if policy.isValidPassword(password):
+        return password 
+
+    raise Exception("Invalid password generated. This should never happen.")

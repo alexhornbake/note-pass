@@ -2,10 +2,6 @@
   "policy_name": "chase.com",
   "policy_version": "1",
   "policy_date": 1489295234,
-  "policy_checksum": {
-    "algo": "sha256",
-    "hash": "86e249f84b95bc2d568fdd908c4aadff05946ac379d051d8cb00c3876e786fe1"
-  },
   "character_length": 32,
   "character_types": {
     "a-z": "abcdefghijklmnopqrstuvwxyz",
