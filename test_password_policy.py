@@ -29,7 +29,29 @@ class TestPasswordPolicyMethods(unittest.TestCase):
         # check a valid password
         self.assertTrue(policy.isValidPassword('hhAVa^Vzs,D4}FV{*L_?IjC:KAxJune$'))
 
+    def test_applyRules(self):
+        policy = Policy('./policies/example.json')
 
+        #test repeating password without special chars
+        passwordSeed1 = 'SNRrrrrrgTN0BABwPz5y0Hkjcrc2t6l7Wnn4LM9UQPXSb24TYzdj9Z2u7Ls03IZQYhULb'
+        output = policy.applyRules(passwordSeed1)
+        self.assertTrue(policy.isValidPassword(output))
+
+        #test consecutive, repeating, no specials, and multiple passes
+        passwordSeed2 = 'abcdefgAWRNASBASRBASRABCDDDDabcdef#%JETANTEA3qjtee#Qe3eantteQn'
+
+        output = policy.applyRules(passwordSeed2)
+        self.assertTrue(policy.isValidPassword(output))
+
+        #test really consecutive
+        passwordSeed3 = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        output = policy.applyRules(passwordSeed3)
+        self.assertTrue(policy.isValidPassword(output))
+
+        #test really repetetive
+        passwordSeed4 = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+        output = policy.applyRules(passwordSeed4)
+        self.assertTrue(policy.isValidPassword(output))
 
 if __name__ == '__main__':
     unittest.main()

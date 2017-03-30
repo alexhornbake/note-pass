@@ -23,6 +23,8 @@ def getPassword(policyFilename, masterPass, bits):
         # than 256 chars, so we modulo by length to wrap around.
         password += baseChars[ord(i)%len(baseChars)]
 
+    print(password)
+
     # TODO: apply remaining rules
     # currently, only length is applied
     password = policy.applyRules(password)
