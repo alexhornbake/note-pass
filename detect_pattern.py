@@ -68,10 +68,6 @@ def getBoundingCornersOfRects(rects):
         np.float32
     )
 
-def getAvgRectSize(rects):
-    t = np.transpose(np.array(rects))
-    return [np.average(t[2]), np.average(t[3])]
-
 def getPatternFromImage(im, numCols, numRows):
     firstpass_size_threshold=5
     secondpass_size_theshold=5
