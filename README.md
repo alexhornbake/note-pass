@@ -27,6 +27,8 @@ The longer the better. Something memorable is good. [Like This](https://xkcd.com
 
 ### Pattern
 
+![Pattern Image](/test_pattern_5.jpg?raw=true)
+
 Think of it as a hand drawn QR code. Why hand drawn? Because printers are evil vile devices, and this should be simple and portable.
 
 The lines on an a grid can store 2*(n*(n+1)) bits. For example. A 2x2 grid has 12 lines, or 12bits.
