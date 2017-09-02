@@ -53,7 +53,7 @@ Currently Supported policy rules:
 3. This hash is used as your password seed.
 4. Since this seed is going to contain all kinds of funky characters, we consult the policy and grab the usable character set.
 5. We then translate the hash (an array of bytes) to an array of acceptable characters.
-6. The passowrd is checked against the rules.
+6. The password is checked against the rules.
 7. If the password does not meet the rules, it is changed in a deterministic way. IE. characters are added to the front or incremented in place.
 8. The password is checked and augmented recursively until it passes the rules.
 
