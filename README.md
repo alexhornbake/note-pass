@@ -11,7 +11,7 @@ Offline. Paper Password Manager.
 
 Security is all about increasing the cost of attack. The goal of this was to raise that cost to be quite high while still managing passwords in a sane way that is not a total pain in the ass to use.
 
-First, LastPass, OnePassword and their ilk are great systems. Overall they have made users more security, and for most people are likely the "correct solution" at this time. However, they aren't for me. I'm paranoid, and a little bit of a digital "prepper". I have no doubt that they are cryptographically more secure of a system than "note-pass". That being said, IMHO, an internet based centralized password system is like a slot machine. As the system collects more and more passwords, the cost of attack remains sufficiently constant while the pay off increases with user growth. All systems are vulerable, and it's not a question of "if" it can be cracked, but a question of cost and potential payoff for an attacker. As these systems grow market share that payoff increases.
+First, LastPass, OnePassword and their ilk are great systems. Overall they have made users more security, and for most people are likely the "correct solution" at this time. However, this is an exploration of a non-centralized system. I have no doubt that they are cryptographically more secure of a system than "note-pass". That being said, imo, an internet based centralized password system is like a slot machine. As the system collects more and more passwords, the cost of attack remains sufficiently constant while the pay off increases with user growth. All systems are vulerable, and it's not a question of "if" it can be cracked, but a question of cost and potential payoff for an attacker. As these systems grow market share that payoff increases.
 
 Goals/Requirements:
 1) Passwords should not be stored digitally. This seemed like a good way to raise the cost of attack to the same level as a armed robbery. IE, you can have my password if you put a gun to my head.
@@ -68,7 +68,7 @@ Currently Supported policy rules:
 ### How it works.
 
 1. Detection. The pattern is read by your webcam and turned in to bits.
-2. Your master password and the pattern (salt) are run through pbkdf2 using sha512 100k times.
+2. Your master password and the resulting bits from reading this pattern are run through pbkdf2 using sha512 100k times.
 3. This hash is used as your password seed.
 4. Since this seed is going to contain all kinds of funky characters, we consult the policy and grab the usable character set.
 5. We then translate the hash (an array of bytes) to an array of acceptable characters.
